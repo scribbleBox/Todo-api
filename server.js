@@ -13,7 +13,7 @@ app.get('/', function (req, res) {
  res.send('Todo api root.');
 });
 
-// GET /todos
+// GET /todos?completed=false&q=work
 app.get('/todos', function (req, res) {
   var queryParams = req.query;
   var filteredTodos = todos;
@@ -24,7 +24,17 @@ app.get('/todos', function (req, res) {
     filteredTodos = _.where(filteredTodos, {completed: false});
   }
 
+  // if len greater than 0 && index of " jhsdjfhjsdf" > 0
+    // return filtered todos uodtaed description
+
+  if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
+    filteredTodos = _.filter(filteredTodos, function(todo) {
+      return todo.description.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
+    });
+  }
+
   res.json(filteredTodos);
+
 });
 
 // GET /todo/:id
